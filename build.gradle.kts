@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "dev.hexedhero.hivechecker"
-version = "3.13.4"
+version = "3.13.4-Folia"
 
 repositories {
     mavenCentral()
