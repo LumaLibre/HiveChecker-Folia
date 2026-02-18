@@ -7,35 +7,42 @@ import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
 
 plugins {
-    id("java-library")
-    id("io.freefair.lombok") version "9.2.0"
+    id("java")
     id("com.gradleup.shadow") version "9.3.1"
 }
 
-// TODO: Configure
-group = "dev.lumas.decompile_patcher_template"
-version = "0.0.0"
+group = "dev.hexedhero.hivechecker"
+version = "3.13.4"
 
 repositories {
-    // TODO: Configure
+    mavenCentral()
+    maven("https://repo.papermc.io/repository/maven-public/")
 }
 
 dependencies {
-    // TODO: Configure
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("com.mojang:authlib:3.13.56")
+    implementation("org.bstats:bstats-bukkit:3.1.0")
+    implementation("org.json:json:20251224")
 }
 
-// TODO: Configure
+
 tasks {
     shadowJar {
         archiveClassifier.set("")
         archiveBaseName.set(rootProject.name)
 
-        manifest {
-            attributes(
-                "Implementation-Title" to rootProject.name,
-                "Implementation-Version" to project.version,
-            )
-        }
+        val pack = "dev.hexedhero.hivechecker.shaded"
+
+        relocate("org.bstats", "$pack.bstats")
+        relocate("org.json", "$pack.json")
+
+//        manifest {
+//            attributes(
+//                "Implementation-Title" to rootProject.name,
+//                "Implementation-Version" to project.version,
+//            )
+//        }
     }
 
     build {
@@ -47,20 +54,20 @@ tasks {
     }
 }
 
-// TODO: Configure
+
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
-// TODO: Configure
+
 val decompileConfig = DecompileConfig(
-    inputJar = "sources/Decompile-Patcher-Template.jar",
+    inputJar = "sources/HiveChecker.jar",
     packageMappings = mapOf(
-        "dev/lumas/decompile_patcher_template" to "."
+        "dev/hexedhero/hivechecker" to "."
     ),
     resourceMappings = mapOf(
         "plugin.yml" to ".",
-        //"config.yml" to "."
+        "config.yml" to "."
     )
 )
 
